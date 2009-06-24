@@ -88,6 +88,10 @@
 			
 			return $data;
 		}
+		
+		function __sortTitlesAscending($t1, $t2){
+			return strcmp(strtolower($t1[2]), strtolower($t2[2]));
+		}
 
 		function displayPublishPanel(&$wrapper, $data=NULL, $flagWithError=NULL, $fieldnamePrefix=NULL, $fieldnamePostfix=NULL){
 
@@ -102,6 +106,8 @@
 			foreach($states as $id => $title){
 				$options[] = array($id, in_array($id, $data['page_id']), $title);
 			}
+			
+			usort($options, array('fieldPages','__sortTitlesAscending'));
 			
 			$fieldname = 'fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix;
 			if($this->get('allow_multiple_selection') == 'yes') $fieldname .= '[]';
