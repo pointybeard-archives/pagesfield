@@ -104,7 +104,7 @@
 			$options = array();
 
 			foreach($states as $id => $title){
-				$options[] = array($id, in_array($id, $data['page_id']), $title);
+				$options[] = array($id, in_array($id, $data['page_id']), General::sanitize($title));
 			}
 			
 			usort($options, array('fieldPages','__sortTitlesAscending'));
