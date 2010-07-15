@@ -108,7 +108,7 @@
 		
 		function toggleFieldData($data, $newState){
 			
-			$page = $this->_engine->Database->fetchRow(0, "SELECT `title`, `id` FROM `tbl_pages` WHERE `id` = '$newState' LIMIT 1");
+			$page = $this->_engine->Database->fetchRow(0, "SELECT `title`, `id`, `handle` FROM `tbl_pages` WHERE `id` = '$newState' LIMIT 1");
 			
 			$data['handle'] = $page['handle'];
 			$data['title'] = $page['title'];
