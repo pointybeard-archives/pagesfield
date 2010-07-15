@@ -93,6 +93,7 @@
 				
 				if($p['path'] != NULL && $include_parent_titles){
 					$bits = preg_split('/\//', $p['path'], -1, PREG_SPLIT_NO_EMPTY);
+					$bits = array_reverse($bits);
 					
 					foreach($bits as $h){
 						$parent = $this->_engine->Database->fetchVar('title', 0, "SELECT `title` FROM `tbl_pages` WHERE `handle` = '$h' LIMIT 1");
