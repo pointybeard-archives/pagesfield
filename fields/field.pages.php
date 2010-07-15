@@ -56,7 +56,35 @@
 			
 		function getToggleStates($include_parent_titles=true){
 			
-			$pages = $this->_engine->Database->fetch("SELECT * FROM `tbl_pages` ORDER BY `sortorder` ASC");
+			$types = $this->get('page_types');
+			$types = preg_split('/\s*,\s*/', $types, -1, PREG_SPLIT_NO_EMPTY);
+			$types = @array_map('trim', $types);
+			if (is_array($types) && !empty($types)) {
+				$where = "";
+				for ($i=0; $i < sizeof($types); $i++) {
+					if ($i==0) {
+						$where .= "t.type = '{$types[$i]}'";
+					} else {
+						$where .= " OR t.type = '{$types[$i]}'";
+					}
+				}
+				$where = "AND ({$where})";
+			} else {
+				$where = NULL;
+			}
+			
+			$pages = $this->_engine->Database->fetch("
+				SELECT
+					p.*
+				FROM
+					`tbl_pages` AS p
+				LEFT JOIN
+					`tbl_pages_types` as t ON p.id = t.page_id
+				WHERE 1
+				{$where}
+				ORDER BY
+					p.sortorder ASC
+			");
 			
 			$result = array();
 			foreach($pages as $p){
@@ -202,6 +230,7 @@
 			if(!parent::commit()) return false;
 			
 			$id = $this->get('id');
+			$page_types = $this->get('page_types'); // TODO safe
 
 			if($id === false) return false;
 			
@@ -209,6 +238,7 @@
 			
 			$fields['field_id'] = $id;
 			$fields['allow_multiple_selection'] = ($this->get('allow_multiple_selection') ? $this->get('allow_multiple_selection') : 'no');
+			$fields['page_types'] = $page_types;
 
 			$this->Database->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");
 			
@@ -226,6 +256,27 @@
 			
 			parent::displaySettingsPanel($wrapper, $errors);
 						
+			## Page types filter
+			$label = new XMLElement('label', __('Filter pages by type'));
+			$label->appendChild(Widget::Input('fields['.$this->get('sortorder').'][page_types]', $this->get('page_types')));
+			$wrapper->appendChild($label);
+			$types = Symphony::Database()->fetchCol('type', "
+				SELECT
+					p.type
+				FROM
+					`tbl_pages_types` AS p
+				GROUP BY
+					p.type
+				ORDER BY
+					p.type ASC
+			");
+			$tags = new XMLElement('ul');
+			$tags->setAttribute('class', 'tags');
+			if(is_array($types) && !empty($types)) {
+				foreach($types as $type) $tags->appendChild(new XMLElement('li', $type));
+			}
+			$wrapper->appendChild($tags);
+			
 			## Allow selection of multiple items
 			$label = Widget::Label();
 			$input = Widget::Input('fields['.$this->get('sortorder').'][allow_multiple_selection]', 'yes', 'checkbox');
