@@ -7,9 +7,11 @@
 		function __construct(&$parent){
 			parent::__construct($parent);
 			$this->_name = 'Page Select Box';
+			$this->_required = true;
 			
 			// Set default
-			$this->set('show_column', 'no');			
+			$this->set('required', 'yes');
+			$this->set('show_column', 'no');
 		}
 
 		function canToggle(){
@@ -131,6 +133,8 @@
 			if(!is_array($data['title'])) $data['title'] = array($data['title']);
 			
 			$options = array();
+
+			if($this->get('required') != 'yes') $options[] = array(NULL, false, NULL);
 
 			foreach($states as $id => $title){
 				$options[] = array($id, in_array($id, $data['page_id']), General::sanitize($title));
@@ -286,7 +290,7 @@
 			$wrapper->appendChild($label);
 			
 			$this->appendShowColumnCheckbox($wrapper);
-						
+			$this->appendRequiredCheckbox($wrapper);
 		}
 
 		function groupRecords($records){
