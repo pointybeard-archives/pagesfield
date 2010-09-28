@@ -2,7 +2,7 @@
 Page Select Box Field
 ------------------------------------
 
-Version: 1.2
+Version: 1.4
 Author: Symphony Team (team@symphony21.com)
 Build Date: 23rd December 2008
 Requirements: Symphony Beta revision 5 or greater.
@@ -19,6 +19,10 @@ Requirements: Symphony Beta revision 5 or greater.
 
 
 [CHANGE LOG]
+
+1.4 - Added ability to set field to required/not required.
+
+1.3 - Added page type filter option.
 
 1.2 - Publish select box will use page ID's instead of handles. This solves 
 	  problem where 2 pages share the same handle, but only one shows up due
