@@ -169,11 +169,34 @@
 		}
 
 		function prepareTableValue($data, XMLElement $link=NULL){
-			$value = $data['title'];
+			// $value = $data['title'];
+			
+			// Recursive get the parents:			
+			$value = $this->getParents($data['page_id']);
 			
 			if(!is_array($value)) $value = array($value);
 			
 			return parent::prepareTableValue(array('value' => General::sanitize(@implode(', ', $value))), $link);
+		}
+		
+		function getParents($pageId)
+		{
+			$sql = 'SELECT `title`, `parent` FROM `tbl_pages` WHERE `id` = '.$pageId.';';
+			$arr = Symphony::Database()->fetch($sql);
+			
+			if(count($arr) == 1)
+			{
+				// Recursive:
+				if($arr[0]['parent'] != null)
+				{
+					return $this->getParents($arr[0]['parent']).' / '.$arr[0]['title'];
+				} else {
+					return $arr[0]['title'];
+				}
+			}
+			
+			// By default, return an empty string:
+			return '';
 		}
 
 		function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL){
@@ -351,12 +374,14 @@
 
 		public function buildSortingSQL(&$joins, &$where, &$sort, $order='ASC', $useIDFieldForSorting=false){
 			
+			
 			$sort_field = (!$useIDFieldForSorting ? 'ed' : 't' . $this->get('id'));
 			
 			$joins .= "INNER JOIN `tbl_entries_data_".$this->get('id')."` AS `$sort_field` ON (`e`.`id` = `$sort_field`.`entry_id`) ";
-			$sort .= 'ORDER BY ' . (strtolower($order) == 'random' ? 'RAND()' : "`$sort_field`.`handle` $order");
-
+			$joins .= "INNER JOIN `tbl_pages` AS `p1` ON (`$sort_field`.`page_id` = `p1`.`id`) ";
+			$joins .= "LEFT JOIN `tbl_pages` AS `p2` ON (`p1`.`parent` = `p2`.`id`) ";
 			
+			$sort .= 'ORDER BY `p2`.`handle` '.$order.', ' . (strtolower($order) == 'random' ? 'RAND()' : "`$sort_field`.`handle` $order");
 		}
 
 	}
