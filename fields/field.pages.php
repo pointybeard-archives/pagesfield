@@ -134,7 +134,7 @@
 			
 			$options = array();
 
-			if($this->get('required') != 'yes') $options[] = array(NULL, false, NULL);
+			if($this->get('required') != 'yes' && $this->get('allow_multiple_selection') != 'yes') $options[] = array(NULL, false, NULL);
 
 			foreach($states as $id => $title){
 				$options[] = array($id, in_array($id, $data['page_id']), General::sanitize($title));
@@ -183,8 +183,7 @@
 		function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL){
 
 			$status = self::__OK__;
-			var_dump($data);
-			exit;
+			
 			if(empty($data)) return NULL;
 			
 			if(!is_array($data)) $data = array($data);
