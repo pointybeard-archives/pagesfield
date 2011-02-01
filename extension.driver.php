@@ -13,13 +13,13 @@
 		}
 		
 		public function uninstall(){
-			$this->_Parent->Database->query("DROP TABLE `tbl_fields_pages`");
+			Symphony::Database()->query("DROP TABLE `tbl_fields_pages`");
 		}
 
 
 		public function install(){
 
-			return $this->_Parent->Database->query("CREATE TABLE `tbl_fields_pages` (
+			return Symphony::Database()->query("CREATE TABLE `tbl_fields_pages` (
 			  `id` int(11) unsigned NOT NULL auto_increment,
 			  `field_id` int(11) unsigned NOT NULL,
 			  `allow_multiple_selection` enum('yes','no') NOT NULL default 'no',
@@ -32,7 +32,7 @@
 		
 		public function update($previousVersion) {
 			if(version_compare($previousVersion, '1.3', '<')){
-				$updated = Administration::instance()->Database->query(
+				$updated = Symphony::Database()->query(
 					"ALTER TABLE `tbl_fields_pages`
 						ADD `page_types` varchar(255) default NULL"
 				);

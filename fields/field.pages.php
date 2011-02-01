@@ -75,7 +75,7 @@
 				$where = NULL;
 			}
 			
-			$pages = $this->_engine->Database->fetch("
+			$pages = Symphony::Database()->fetch("
 				SELECT
 					p.*
 				FROM
@@ -98,7 +98,7 @@
 					$bits = array_reverse($bits);
 					
 					foreach($bits as $h){
-						$parent = $this->_engine->Database->fetchVar('title', 0, "SELECT `title` FROM `tbl_pages` WHERE `handle` = '$h' LIMIT 1");
+						$parent = Symphony::Database()->fetchVar('title', 0, "SELECT `title` FROM `tbl_pages` WHERE `handle` = '$h' LIMIT 1");
 						$title = $parent . ' / ' . $title;
 					}
 				}
@@ -111,7 +111,7 @@
 		
 		function toggleFieldData($data, $newState){
 			
-			$page = $this->_engine->Database->fetchRow(0, "SELECT `title`, `id`, `handle` FROM `tbl_pages` WHERE `id` = '$newState' LIMIT 1");
+			$page = Symphony::Database()->fetchRow(0, "SELECT `title`, `id`, `handle` FROM `tbl_pages` WHERE `id` = '$newState' LIMIT 1");
 			
 			$data['handle'] = $page['handle'];
 			$data['title'] = $page['title'];
@@ -183,7 +183,8 @@
 		function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL){
 
 			$status = self::__OK__;
-			
+			var_dump($data);
+			exit;
 			if(empty($data)) return NULL;
 			
 			if(!is_array($data)) $data = array($data);
@@ -191,7 +192,7 @@
 			$result = array('title' => array(), 'handle' => array(), 'page_id' => array());
 			foreach($data as $page_id){
 				
-				$page = $this->_engine->Database->fetchRow(0, "SELECT `title`, `handle` FROM `tbl_pages` WHERE `id` = '$page_id' LIMIT 1");
+				$page = Symphony::Database()->fetchRow(0, "SELECT `title`, `handle` FROM `tbl_pages` WHERE `id` = '$page_id' LIMIT 1");
 				 
 				$result['handle'][] = $page['handle'];
 				$result['title'][] = $page['title'];
@@ -245,9 +246,9 @@
 			$fields['allow_multiple_selection'] = ($this->get('allow_multiple_selection') ? $this->get('allow_multiple_selection') : 'no');
 			$fields['page_types'] = $page_types;
 
-			$this->Database->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");
+			Symphony::Database()->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");
 			
-			if(!$this->Database->insert($fields, 'tbl_fields_' . $this->handle())) return false;
+			if(!Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle())) return false;
 			
 			return true;
 					
@@ -318,7 +319,7 @@
 		
 		function createTable(){
 			
-			return $this->_engine->Database->query(
+			return Symphony::Database()->query(
 			
 				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
 				  `id` int(11) unsigned NOT NULL auto_increment,
