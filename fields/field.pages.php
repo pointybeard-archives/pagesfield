@@ -173,11 +173,37 @@
 		}
 
 		function prepareTableValue($data, XMLElement $link=NULL){
-			$value = $data['title'];
+			$pages = Symphony::Database()->fetch("
+				SELECT
+					p.*
+				FROM
+					`tbl_pages` AS p
+				WHERE p.`id` = {$data['page_id']}
+				ORDER BY
+					p.sortorder ASC
+			");
 			
-			if(!is_array($value)) $value = array($value);
+			$result = array();
+			foreach($pages as $p){
+				
+				$title = $p['title'];
+				
+				if($p['path'] != NULL){
+					$bits = preg_split('/\//', $p['path'], -1, PREG_SPLIT_NO_EMPTY);
+					$bits = array_reverse($bits);
+					
+					foreach($bits as $h){
+						$parent = Symphony::Database()->fetchVar('title', 0, "SELECT `title` FROM `tbl_pages` WHERE `handle` = '$h' LIMIT 1");
+						$title = $parent . ' / ' . $title;
+					}
+				}
+				
+				$result[$p['id']] = $title;
+			}
 			
-			return parent::prepareTableValue(array('value' => General::sanitize(@implode(', ', $value))), $link);
+			$value = $title;
+
+			return parent::prepareTableValue(array('value' => General::sanitize($value)), $link);
 		}
 
 		function processRawFieldData($data, &$status, $simulate=false, $entry_id=NULL){
