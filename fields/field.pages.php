@@ -173,6 +173,9 @@
 		}
 
 		function prepareTableValue($data, XMLElement $link=NULL){
+			// stop when no page is set
+			if(!isset($data['page_id'])) return;
+			
 			$pages = Symphony::Database()->fetch("
 				SELECT
 					p.*

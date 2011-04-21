@@ -4,7 +4,7 @@
 	
 		public function about(){
 			return array('name' => 'Field: Page Select Box',
-						 'version' => '1.4',
+						 'version' => '1.4.1',
 						 'release-date' => '2010-07-15',
 						 'author' => array('name' => 'Symphony Team',
 										   'website' => 'http://www.symphony21.com',

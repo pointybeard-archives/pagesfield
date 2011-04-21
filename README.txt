@@ -2,7 +2,7 @@
 Page Select Box Field
 ------------------------------------
 
-Version: 1.4
+Version: 1.4.1
 Author: Symphony Team (team@symphony21.com)
 Build Date: 23rd December 2008
 Requirements: Symphony Beta revision 5 or greater.
