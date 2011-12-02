@@ -3,13 +3,16 @@
 	Class extension_pagesfield extends Extension{
 
 		public function about(){
-			return array('name' => 'Field: Page Select Box',
-						 'version' => '1.4.1',
-						 'release-date' => '2010-07-15',
-						 'author' => array('name' => 'Symphony Team',
-										   'website' => 'http://www.symphony21.com',
-										   'email' => 'team@symphony21.com')
-						);
+			return array(
+				'name' => 'Field: Page Select Box',
+				'version' => '1.4.1',
+				'release-date' => '2011-12-02',
+				'author' => array(
+					'name' => 'Symphony Team',
+					'website' => 'http://www.symphony21.com',
+					'email' => 'team@symphony21.com'
+				)
+			);
 		}
 
 		public function uninstall(){
