@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="pagesfield" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+	<name>Pages Field</name>
+	<description>Easily related entries to pages</description>
+	<repo type="github">https://github.com/symphonists/pagesfield</repo>
+	<url type="discuss">http://symphony-cms.com/discuss/thread/267/</url>
+	<types>
+		<type>Field Types</type>
+	</types>
+	<authors>
+		<author>
+			<name github="symphonists" symphony="community">Symphony Community</name>
+		</author>
+	</authors>
+	<releases>
+		<release version="1.4.1" date="2011-12-02" min="2.0.6" max="2.2.x" />
+	</releases>
+</extension>
