@@ -5,7 +5,12 @@
 	Class fieldPages extends Field{
 
 		function __construct(){
-			parent::__construct();
+            try
+            {
+			    parent::__construct();
+            } catch(Exception $e) {
+                parent::__construct($this);
+            }
 			$this->_name = 'Page Select Box';
 			$this->_required = true;
 
